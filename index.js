@@ -56,8 +56,8 @@ const data = (type) => axios(url).then(response => {
           font-size: 22px;
         }
       </style>
-      ${h4}
-      ${date}
+      <>h3${h4}</h3>
+      <h3>${date}</h3>
       <p>${info}</p>
       <h3>${tableTitle}</h3>
       ${table}

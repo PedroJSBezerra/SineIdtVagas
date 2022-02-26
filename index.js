@@ -2,16 +2,20 @@
 import axios from 'axios'
 import { load } from 'cheerio'
 import express from 'express'
+//dirname es6 modules support *_*
+import { fileURLToPath } from 'url'
+import { dirname } from 'path'
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = dirname(__filename)
 //vars
-const PORT = process.env.PORT || 8000
 const app = express()
+const PORT = process.env.PORT || 8000
 const url = 'https://www.idt.org.br/vagas-disponiveis'
+//sets
+app.set('view engine', 'ejs')
+app.use(express.static(__dirname + '/public'))
 
 //functions
-
-/**
-  *@param {string} type
-*/
 const data = (type) => axios(url).then(response => {
 
   const html = response.data
@@ -28,33 +32,37 @@ const data = (type) => axios(url).then(response => {
   }
 
   if(type == 'html'){
-    return `
-      <style>
-        *{
-          font-family: sans-seriff;
-        }
+    let ht = `
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./styles/index.css">
+    <style>
+      *{
+        font-family: sans-seriff;
+      }
 
-        tr {
-          border: 1px solid rgba(0 0 0 / 40%);
-        }
-        
-        tr > td:nth-child(2) {
-          text-align: center;
-        }
+      tr {
+        border: 1px solid rgba(0 0 0 / 40%);
+      }
+      
+      tr > td:nth-child(2) {
+        text-align: center;
+      }
 
-        td {
-          padding: 4px 10px;
-        }
-        
-        td[colspan="2"]{
-          background: #e0ebff;
-        }
-        
-        td[colspan="2"] > em {
-          font-style: inherit;
-          font-weight: 600;
-          font-size: 22px;
-        }
+      td {
+        padding: 4px 10px;
+      }
+      
+      td[colspan="2"]{
+        background: #e0ebff;
+      }
+      
+      td[colspan="2"] > em {
+        font-style: inherit;
+        font-weight: 600;
+        font-size: 22px;
+      }
       </style>
       <h3>${h4}</h3>
       <h3>${date}</h3>
@@ -62,6 +70,8 @@ const data = (type) => axios(url).then(response => {
       <h3>${tableTitle}</h3>
       ${table}
     `
+     console.log(ht.length) 
+    return ht
   }
 
   if(type == 'obj'){
@@ -76,6 +86,10 @@ const data = (type) => axios(url).then(response => {
 })
 
 //routes
+app.get('/', (req,res) => {
+  res.render('index')
+})
+
 app.get('/obj', async(req,res) => {
   res.send(await data('obj'))
 })
@@ -83,10 +97,6 @@ app.get('/obj', async(req,res) => {
 app.get('/html', async(req,res) => {
   res.send(await data('html'))
 })
-
-
-
-
 
 
 

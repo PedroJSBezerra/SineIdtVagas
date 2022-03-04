@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -7,9 +8,48 @@
   <link rel="stylesheet" href="./styles/index.css">
   <title>Vagas do Sine</title>
 </head>
-<body>
 
-  <h1>Vagas do Sine Ceará</h1>
+<body>
+  <%= table %> 
+
+  <% if(false){ %>
+    <h1>
+      <%= data.pageTitle %>
+    </h1>
+    <h3>
+      <%= data.updateTime %>
+    </h3>
+    <p>
+      <%= data.pageInfo %>
+    </p>
+
+    <ul>
+      <% data.table.forEach(city => { %>
+        <li>
+          <h3>
+            <%= city.name %>
+          </h3>
+          <p>
+            <%= city.info %>
+          </p>
+          <ul>
+            <% city.jobs.forEach(job => { %> 
+              <li>
+                <p>
+                  <%= job.name %>
+                </p>
+                <p>
+                  <%= job.qt %>
+                </p>
+              </li>
+            <% }) %> 
+          </ul>
+        </li>
+      <% }) %>
+
+    </ul>
+  <% } %>  
 
 </body>
+
 </html>

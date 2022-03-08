@@ -31,7 +31,7 @@ app.get('/', (req,res) => {
       $("#ContentPlaceHolder1_lblCorpo > table:nth-child(2) > tbody > tr > td")
       .children()
       .each((index, element) => {
-        arr.push($(element).text())
+        arr.push($(element).html())
       })
       
       if(index == 'time'){
@@ -53,12 +53,25 @@ app.get('/', (req,res) => {
       $("#ContentPlaceHolder1_lblCorpo > table.table > tbody")
       .children()
       .each((index, element) => {
-        arr.push($(element).text().replace(/\n|\t/g))
+        //tr com 2 children
+        let arr2 = []
+        $(element)
+        .children()
+        .each((index,element) => {
+          //td com 1 children
+          let city = $(element).find(':not(em > *)').children()
+
+          if(city.length != 0 || city.length != 1){
+            console.log($(element).text())
+          }
+          
+          arr2.push($(element).text().replace(/(?:\r\n|\r|\n|\t|<br>)/g, ''))
+        })
+        arr.push(arr2)
       })
       return arr
     }
-    console.log(city()[96])
-    res.send(city()[96])
+    res.send(city())
   })
 })
 

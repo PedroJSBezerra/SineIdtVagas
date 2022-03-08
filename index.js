@@ -25,12 +25,40 @@ app.get('/', (req,res) => {
     const $ = load(html)
 
     const mainData = $("#main > div > div > div.col-md-8").html()
+    const title = $("#ContentPlaceHolder1_lblCorpo > h4 > strong > span").text()
+    const infoTable = (index) => {
+      let arr = []
+      $("#ContentPlaceHolder1_lblCorpo > table:nth-child(2) > tbody > tr > td")
+      .children()
+      .each((index, element) => {
+        arr.push($(element).text())
+      })
+      
+      if(index == 'time'){
+        return arr[0]
+      }
 
-    const title = $("#ContentPlaceHolder1_lblCorpo > h4").html()
-    const infoTable = $(mainData).find('#ContentPlaceHolder1_lblCorpo > table:nth-child(2)').html()
-    const dataTable = $(mainData).find('#ContentPlaceHolder1_lblCorpo > table.table').html()
-    
-    res.send(dataTable)
+      if(index == 'info'){
+        return arr[3]
+      }
+
+      if(index == undefined){
+        return arr
+      }
+
+      return arr[index]
+    }
+    const city = () => {
+      let arr = []
+      $("#ContentPlaceHolder1_lblCorpo > table.table > tbody")
+      .children()
+      .each((index, element) => {
+        arr.push($(element).text().replace(/\n|\t/g))
+      })
+      return arr
+    }
+    console.log(city()[96])
+    res.send(city()[96])
   })
 })
 

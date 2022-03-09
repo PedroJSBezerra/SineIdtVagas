@@ -48,29 +48,20 @@ app.get('/', (req,res) => {
 
       return arr[index]
     }
+
     const city = () => {
       let arr = []
       $("#ContentPlaceHolder1_lblCorpo > table.table > tbody")
       .children()
       .each((index, element) => {
         //tr com 2 children
-        let arr2 = []
-        $(element)
-        .children()
-        .each((index,element) => {
-          //td com 1 children
-          let city = $(element).find(':not(em > *)').children()
-
-          if(city.length != 0 || city.length != 1){
-            console.log($(element).text())
-          }
-          
-          arr2.push($(element).text().replace(/(?:\r\n|\r|\n|\t|<br>)/g, ''))
-        })
-        arr.push(arr2)
+        console.log($(element).text())
+        arr.push($(element).html())
       })
+
       return arr
     }
+
     res.send(city())
   })
 })

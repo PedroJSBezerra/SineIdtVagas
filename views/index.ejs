@@ -10,46 +10,64 @@
 </head>
 
 <body>
-  <%= table %> 
+  <h1>Vagas do sine</h1>
 
-  <% if(false){ %>
-    <h1>
-      <%= data.pageTitle %>
-    </h1>
-    <h3>
-      <%= data.updateTime %>
-    </h3>
-    <p>
-      <%= data.pageInfo %>
-    </p>
+  <form id="selector" action="/city" method="post">
 
-    <ul>
-      <% data.table.forEach(city => { %>
-        <li>
-          <h3>
-            <%= city.name %>
-          </h3>
-          <p>
-            <%= city.info %>
-          </p>
-          <ul>
-            <% city.jobs.forEach(job => { %> 
-              <li>
-                <p>
-                  <%= job.name %>
-                </p>
-                <p>
-                  <%= job.qt %>
-                </p>
-              </li>
-            <% }) %> 
-          </ul>
+    <label for="city">Escolha uma cidade</label>
+    <br>
+    <select name="city" id="cityselect">
+      
+      <% scrappedArray.forEach((element, i) => { %>
+        <option value=<%= element[0].cityName %>><%= element[0].cityName %></option>
+      <% }) %>
+      
+    </select>
+    <br><br>
+  </form>
+  <hr>
+
+  <% scrappedArray.forEach((element, i) => { %>
+    
+    <div class="city <%= element[0].cityName %>">
+      <% element.forEach(element => { %>
+        <div class="description">
+          <h3 class="city-name"><%= element.cityName %> </h3>
+          <p class="city-info"><%= element.cityInfo %> </p>
+        </div>
+        <hr>
+        <li class="item">
+          <span><%= element.vaga %> </span>
+          <span><%= element.qt %> </span>
         </li>
       <% }) %>
+    </div>
 
-    </ul>
-  <% } %>  
+  <% }) %>
 
+  <script>
+    const city = document.querySelectorAll('.city')
+    const selector = document.getElementById('selector')
+    const cityselect = document.getElementById('cityselect')
+    
+    function hide(){
+      city.forEach((element, i) => {
+        element.style.display = 'none'
+      })
+    }
+    hide()
+
+    selector.addEventListener('submit', (event) => {
+      event.preventDefault()
+    })
+
+    cityselect.addEventListener('change', (event) => {
+      let elementClass = '.'+event.target.value
+      let hiddenElement = document.querySelector(elementClass)
+      hide()
+      hiddenElement.style.display = 'block'
+    })
+  </script>
 </body>
 
 </html>

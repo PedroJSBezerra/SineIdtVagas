@@ -2,6 +2,9 @@
 import axios from 'axios'
 import { load } from 'cheerio'
 import express from 'express'
+import  bodyparser  from 'body-parser'
+//my libs
+import { scrappedArray } from './scrapper.js'
 //dirname es6 modules support *_*
 import { fileURLToPath } from 'url'
 import { dirname } from 'path'
@@ -14,56 +17,17 @@ const url = 'https://www.idt.org.br/vagas-disponiveis'
 //sets
 app.set('view engine', 'ejs')
 app.use(express.static(__dirname + '/public'))
+//Bodyparser config
+app.use(bodyparser.urlencoded({ extended: true }))
+app.use(bodyparser.json())
 
 //routes
 app.get('/', (req,res) => {
-
-  //functions
-  axios(url).then(response => {
-
-    const html = response.data
-    const $ = load(html)
-
-    const mainData = $("#main > div > div > div.col-md-8").html()
-    const title = $("#ContentPlaceHolder1_lblCorpo > h4 > strong > span").text()
-    const infoTable = (index) => {
-      let arr = []
-      $("#ContentPlaceHolder1_lblCorpo > table:nth-child(2) > tbody > tr > td")
-      .children()
-      .each((index, element) => {
-        arr.push($(element).html())
-      })
-      
-      if(index == 'time'){
-        return arr[0]
-      }
-
-      if(index == 'info'){
-        return arr[3]
-      }
-
-      if(index == undefined){
-        return arr
-      }
-
-      return arr[index]
-    }
-
-    const city = () => {
-      let arr = []
-      $("#ContentPlaceHolder1_lblCorpo > table.table > tbody")
-      .children()
-      .each((index, element) => {
-        //tr com 2 children
-        console.log($(element).text())
-        arr.push($(element).html())
-      })
-
-      return arr
-    }
-
-    res.send(city())
-  })
+  res.render('index', {scrappedArray})
 })
 
-app.listen(PORT, () => console.log(`Server runing on port:${PORT}`))
+app.get('/api', (req,res) => {
+  res.json(scrappedArray)
+})
+
+app.listen(PORT, () => console.log(`Server runing on http://localhost:${PORT}`))
